@@ -4,6 +4,15 @@
 	
 	require_once 'dbconfig.php';
 	
+ session_start();
+
+    // Defines username and password. Retrieve however you like,
+
+
+
+    // Checks to see if the user is already logged in. If so, refirect to correct page.
+    if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+        
 	if(isset($_POST['btnsave']))
 	{
 		$username = $_POST['user_name'];// user name
@@ -54,7 +63,7 @@
 		// if no error occured, continue ....
 		if(!isset($errMSG))
 		{
-			$stmt = $DB_con->prepare('INSERT INTO tbl_users(userName,userProfession,userPic) VALUES(:uname, :ujob, :upic)');
+			$stmt = $DB_con->prepare('INSERT INTO team(teamname,division,photopath) VALUES(:uname, :ujob, :upic)');
 			$stmt->bindParam(':uname',$username);
 			$stmt->bindParam(':ujob',$userjob);
 			$stmt->bindParam(':upic',$userpic);
@@ -70,10 +79,18 @@
 			}
 		}
 	}
+        }
+        else {
+	$errMSG ="Your are not log in you be redirct to login page in 2 Second.";
+        header("refresh:2;login.php");
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+ <link rel="import" href="header.html">
+ <script src="https://www.w3schools.com/lib/w3.js"></script>
+
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload, Insert, Update, Delete an Image using PHP MySQL - Coding Cage</title>
 
@@ -82,27 +99,39 @@
 <!-- Optional theme -->
 <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
 
+<style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */ 
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+    
+    /* Remove the jumbotron's default bottom margin */ 
+     .jumbotron {
+      margin-bottom: 0;
+    }
+   
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+  </style>
 </head>
-<body>
+ <body>
 
-<div class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container">
- 
-        <div class="navbar-header">
-            <a class="navbar-brand" href="http://www.codingcage.com" title='Programming Blog'>Coding Cage</a>
-            <a class="navbar-brand" href="http://www.codingcage.com/search/label/CRUD">CRUD</a>
-            <a class="navbar-brand" href="http://www.codingcage.com/search/label/PDO">PDO</a>
-            <a class="navbar-brand" href="http://www.codingcage.com/search/label/jQuery">jQuery</a>
-        </div>
- 
-    </div>
-</div>
+<div w3-include-html="header.html"></div> 
+
+<script>
+w3.includeHTML();
+</script>
+
 
 <div class="container">
 
 
 	<div class="page-header">
-    	<h1 class="h2">add new user. <a class="btn btn-default" href="index.php"> <span class="glyphicon glyphicon-eye-open"></span> &nbsp; view all </a></h1>
+    	<h1 class="h2">Add New Team. <a class="btn btn-default" href="index.php"> <span class="glyphicon glyphicon-eye-open"></span> &nbsp; view all </a></h1>
     </div>
     
 
@@ -128,17 +157,17 @@
 	<table class="table table-bordered table-responsive">
 	
     <tr>
-    	<td><label class="control-label">Username.</label></td>
-        <td><input class="form-control" type="text" name="user_name" placeholder="Enter Username" value="<?php echo $username; ?>" /></td>
+    	<td><label class="control-label">Team Name</label></td>
+        <td><input class="form-control" type="text" name="user_name" placeholder="Enter Team Name" value="<?php echo $username; ?>" /></td>
     </tr>
     
     <tr>
-    	<td><label class="control-label">Profession(Job).</label></td>
-        <td><input class="form-control" type="text" name="user_job" placeholder="Your Profession" value="<?php echo $userjob; ?>" /></td>
+    	<td><label class="control-label">Division</label></td>
+        <td><input class="form-control" type="text" name="user_job" placeholder="division" value="<?php echo $userjob; ?>" /></td>
     </tr>
     
     <tr>
-    	<td><label class="control-label">Profile Img.</label></td>
+    	<td><label class="control-label">Team Img.</label></td>
         <td><input class="input-group" type="file" name="user_image" accept="image/*" /></td>
     </tr>
     
@@ -153,13 +182,7 @@
     
 </form>
 
-
-
-<div class="alert alert-info">
-    <strong>tutorial link !</strong> <a href="http://www.codingcage.com/2016/02/upload-insert-update-delete-image-using.html">Coding Cage</a>!
-</div>
-
-    
+  
 
 </div>
 

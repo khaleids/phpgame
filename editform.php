@@ -141,7 +141,7 @@ w3.includeHTML();
 
 
 	<div class="page-header">
-    	<h1 class="h2">update profile. <a class="btn btn-default" href="list.php"> all members </a></h1>
+    	<h1 class="h2">update Team profile. <a class="btn btn-default" href="list.php"> All Teams</a></h1>
     </div>
 
 <div class="clearfix"></div>
@@ -163,17 +163,17 @@ w3.includeHTML();
 	<table class="table table-bordered table-responsive">
 	
     <tr>
-    	<td><label class="control-label">Username.</label></td>
+    	<td><label class="control-label">Team Name.</label></td>
         <td><input class="form-control" type="text" name="user_name" value="<?php echo $userName; ?>" required /></td>
     </tr>
     
     <tr>
-    	<td><label class="control-label">Profession(Job).</label></td>
+    	<td><label class="control-label">Division</label></td>
         <td><input class="form-control" type="text" name="user_job" value="<?php echo $userProfession; ?>" required /></td>
     </tr>
     
     <tr>
-    	<td><label class="control-label">Profile Img.</label></td>
+    	<td><label class="control-label">Team Img.</label></td>
         <td>
         	<p><img src="user_images/<?php echo $userPic; ?>" height="150" width="150" /></p>
         	<input class="input-group" type="file" name="user_image" accept="image/*" />

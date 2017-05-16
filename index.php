@@ -2,21 +2,28 @@
 
 	require_once 'dbconfig.php';
 	
+
+session_start(); // Starting Session
+
 	if(isset($_GET['delete_id']))
 	{
 		// select image from db to delete
-		$stmt_select = $DB_con->prepare('SELECT userPic FROM tbl_users WHERE userID =:uid');
-		$stmt_select->execute(array(':uid'=>$_GET['delete_id']));
+		$stmt_select = $DB_con->prepare('SELECT photopath FROM team WHERE teamname =:teamname and  division =:division');
+		$stmt_select->execute(array(':teamname'=>$_GET['delete_id']));
 		$imgRow=$stmt_select->fetch(PDO::FETCH_ASSOC);
-		unlink("user_images/".$imgRow['userPic']);
+		unlink("user_images/".$imgRow['photopath']);
 		
 		// it will delete an actual record from db
-		$stmt_delete = $DB_con->prepare('DELETE FROM tbl_users WHERE userID =:uid');
-		$stmt_delete->bindParam(':uid',$_GET['delete_id']);
+		$stmt_delete = $DB_con->prepare('DELETE FROM team WHERE  teamname =:teamname and  division =:division');
+		$stmt_delete->bindParam(':teamname',$_GET['delete_id']);
 		$stmt_delete->execute();
 		
 		header("Location: index.php");
 	}
+		
+   
+	
+	
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -29,10 +36,27 @@
 <title>Upload, Insert, Update, Delete an Image using PHP MySQL - Coding Cage</title>
 <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
- 
+ <link rel="stylesheet" type="text/css" href="css/me.css">
 
 <style>
     /* Remove the navbar's default rounded borders and increase the bottom margin */ 
+	 /* Remove the navbar's default rounded borders and increase the bottom margin */ 
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+    
+    /* Remove the jumbotron's default bottom margin */ 
+     .jumbotron {
+      margin-bottom: 0;
+    }
+   
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+	
     .navbar {
       margin-bottom: 50px;
       border-radius: 0;
@@ -63,7 +87,7 @@ w3.includeHTML();
 <div class="container">
 
 	<div class="page-header">
-    	<h1 class="h2">all members. / <a class="btn btn-default" href="addnew.php"> <span class="glyphicon glyphicon-plus"></span> &nbsp; add new </a></h1> 
+    	<h1 class="h2">All Teams. / <a class="btn btn-default" href="addnew.php"> <span class="glyphicon glyphicon-plus"></span> &nbsp; add new </a></h1> 
     </div>
     
 <br />
@@ -71,7 +95,7 @@ w3.includeHTML();
 <div class="row">
 <?php
 	
-	$stmt = $DB_con->prepare('SELECT userID, userName, userProfession, userPic FROM tbl_users ORDER BY userID DESC');
+	$stmt = $DB_con->prepare('SELECT teamname, division, photopath FROM team ORDER BY division DESC');
 	$stmt->execute();
 	
 	if($stmt->rowCount() > 0)
@@ -82,11 +106,11 @@ w3.includeHTML();
 			?>
 			<div class="col-xs-12">
 				<p class="page-header"><?php echo $userName."&nbsp;/&nbsp;".$userProfession; ?></p>
-				<img src="user_images/<?php echo $row['userPic']; ?>" class="img-rounded" width="250px" height="250px" />
+				<img src="user_images/<?php echo $row['photopath']; ?>" class="img-rounded" width="250px" height="250px" />
 				<p class="page-header">
 				<span>
-				<a class="btn btn-info" href="editform.php?edit_id=<?php echo $row['userID']; ?>" title="click for edit" onclick="return confirm('sure to edit ?')"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
-				<a class="btn btn-danger" href="?delete_id=<?php echo $row['userID']; ?>" title="click for delete" onclick="return confirm('sure to delete ?')"><span class="glyphicon glyphicon-remove-circle"></span> Delete</a>
+				<a class="btn btn-info" href="editform.php?edit_id=<?php echo $row['teamname']; ?>" title="click for edit" onclick="return confirm('sure to edit ?')"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
+				<a class="btn btn-danger" href="?delete_id=<?php echo $row['teamname']; ?>" title="click for delete" onclick="return confirm('sure to delete ?')"><span class="glyphicon glyphicon-remove-circle"></span> Delete</a>
 				</span>
 				</p>
 			</div>       
